@@ -2096,7 +2096,7 @@ void SPlotter::GeneralCosmetics(TH1* hist)
     hist->GetYaxis()->SetTitle("#DeltaN/N");
   }
 
-  if (bScaleToWidth) hist->GetYaxis()->SetTitle("Events / bin");
+  if (bScaleToWidth) hist->GetYaxis()->SetTitle("Events / binwidth");
 
   hist->GetXaxis()->SetTitleFont(42);
   hist->GetXaxis()->SetLabelFont(42);
@@ -2124,7 +2124,7 @@ void SPlotter::StackCosmetics(THStack* hist)
     hist->GetYaxis()->SetTitle("#DeltaN/N");
   }
 
-  if (bScaleToWidth) hist->GetYaxis()->SetTitle("Events / bin");
+  if (bScaleToWidth) hist->GetYaxis()->SetTitle("Events / binwidth");
 
   hist->GetXaxis()->SetTitleFont(42);
   hist->GetXaxis()->SetLabelFont(42);
