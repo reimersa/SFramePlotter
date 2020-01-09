@@ -54,7 +54,7 @@ SPlotter::SPlotter()
   bPlotLogy    = false;
   bIgnoreEmptyBins = false;
   bScaleToWidth   = false;
- 
+
 }
 
 SPlotter::~SPlotter()
@@ -66,11 +66,11 @@ void SPlotter::SetPsFilename(TString name)
 {
   if (!name.EndsWith(".ps")){
     cerr << "SPlotter::SetPsFilename, given filename: " << name
-	 << " does not end with .ps, intention? Please correct steering." << endl;
+    << " does not end with .ps, intention? Please correct steering." << endl;
     exit(EXIT_FAILURE);
   }
   m_ps_name = name;
-  
+
 }
 
 void SPlotter::DoStacking(vector<TObjArray*>& hists, TObjArray* StackNames, bool rename)
@@ -88,19 +88,19 @@ void SPlotter::DoStacking(vector<TObjArray*>& hists, TObjArray* StackNames, bool
   int narr = hists.size();
   for (int i=narr-1; i>=0; --i){
     TObjArray* ha = hists[i];
-    if (ha->GetEntries()<1) continue;    
+    if (ha->GetEntries()<1) continue;
     TString proc = ((SHist*)ha->At(0))->GetProcessName();
-    if (debug) cout << "SPlotter::DoStacking, hist array = " << i 
-		    << " process name = " << proc << endl;
+    if (debug) cout << "SPlotter::DoStacking, hist array = " << i
+    << " process name = " << proc << endl;
 
     // loop over all stack-names
     for (int j=0; j<StackNames->GetEntries(); ++j){
       TString sname = ((TObjString*)StackNames->At(j))->GetString();
       if (debug) cout << " stack name = " << sname << endl;
       if (proc.Contains(sname)){
-	if (debug) cout << " -> found match, stacking this array." << endl;
-	StackHists(hists, i, rename);
-	break;
+        if (debug) cout << " -> found match, stacking this array." << endl;
+        StackHists(hists, i, rename);
+        break;
       }
     }
   }
@@ -116,7 +116,7 @@ void SPlotter::StackHists(std::vector<TObjArray*>& hists, int index, bool rename
   // stack histograms at position 'index' with an existing array of stacks
   // in hists
   // if the stacks don't exist, they are created and added to the array
-  
+
   // get the stack (create a new one if it doesn't exist yet)
   TObjArray* stacks = GetStacks(hists, index);
 
@@ -125,8 +125,8 @@ void SPlotter::StackHists(std::vector<TObjArray*>& hists, int index, bool rename
     SHist* stack = (SHist*)stacks->At(i);
     SHist* hist = (SHist*)hists[index]->At(i);
     if (!stack || !hist){
-      cerr << "SPlotter::StackHists: stack or hist at position " << i 
-	   << " does not exist! Abort." << endl;
+      cerr << "SPlotter::StackHists: stack or hist at position " << i
+      << " does not exist! Abort." << endl;
       cerr << "index of hists = " << hists.size() << " histograms = " << hists[index]->GetEntries() << endl;
       exit(EXIT_FAILURE);
     }
@@ -134,9 +134,9 @@ void SPlotter::StackHists(std::vector<TObjArray*>& hists, int index, bool rename
     TString stackname = stack->GetStack()->GetName();
     TString histname = hist->GetHist()->GetName();
     if (!stackname.Contains(histname)){
-      cerr << "SPlotter::StackHists: incompatible histograms at position " << i 
-	   << ", stackname = " << stackname << " histname = " << histname 
-	   << ". Prefer to exit because of consistency." << endl;
+      cerr << "SPlotter::StackHists: incompatible histograms at position " << i
+      << ", stackname = " << stackname << " histname = " << histname
+      << ". Prefer to exit because of consistency." << endl;
       exit(EXIT_FAILURE);
     }
     // still here? do the stackin'!
@@ -152,12 +152,12 @@ void SPlotter::StackHists(std::vector<TObjArray*>& hists, int index, bool rename
     hist->SetDoDraw(false);
     stack->SetUnc(hist->GetUnc(), stack->GetStack()->GetHists()->GetSize()-1);
     if (debug) cout << "stacking hist " << histname << " on " << stackname << " for process " << hist->GetProcessName()
-		    << " (dir = " << stack->GetDir() << ")" << endl;
+    << " (dir = " << stack->GetDir() << ")" << endl;
     if (i==0){
       cout << "stacking process " << hist->GetProcessName() << " with weight " << hist->GetWeight() << " and uncertainty " << hist->GetUnc() << endl;
     }
-  }  
-  
+  }
+
   return;
 
 }
@@ -173,8 +173,8 @@ TObjArray* SPlotter::GetStacks(std::vector<TObjArray*>& hists, int index)
   int narr = hists.size();
   for (int i=0; i<narr; ++i){
     if (hists[i]->GetEntries()==0){
-      cerr << "SPlotter::GetStacks: Got no histograms in array " << i 
-	   << " unexpected behaviour - abort." << endl;
+      cerr << "SPlotter::GetStacks: Got no histograms in array " << i
+      << " unexpected behaviour - abort." << endl;
       exit(EXIT_FAILURE);
     }
 
@@ -189,17 +189,17 @@ TObjArray* SPlotter::GetStacks(std::vector<TObjArray*>& hists, int index)
   // no stack found, create a new array with THStacks -> use position 'index'
   // in the array as a blue-print
   if (index>-1){
-    if (debug) cout << "SPlotter::GetStacks: Creating new array of THStacks " 
-		    << "using position " << index << " as blueprint." << endl;
+    if (debug) cout << "SPlotter::GetStacks: Creating new array of THStacks "
+    << "using position " << index << " as blueprint." << endl;
     if (index>narr){
       cerr << "SPlotter::GetStacks: Can not create an array of stacks from array"
-	   << " index " << index << ", since size is only " << hists.size() 
-	   << ". Unexpected behaviour - abort." << endl;
+      << " index " << index << ", since size is only " << hists.size()
+      << ". Unexpected behaviour - abort." << endl;
       exit(EXIT_FAILURE);
     }
 
     arr = new TObjArray();
-    for (int i=0; i<hists[index]->GetEntries();++i){      
+    for (int i=0; i<hists[index]->GetEntries();++i){
       TString hname = ((SHist*)hists[index]->At(i))->GetHist()->GetName();
       TString name = hname + "_stack";
       THStack* st = new THStack(name, "");
@@ -209,12 +209,12 @@ TObjArray* SPlotter::GetStacks(std::vector<TObjArray*>& hists, int index)
       sh->SetDoDraw(true);
       arr->Add(sh);
       if (debug) cout << "SPlotter::GetStacks: Adding stack with name " << name
-		      << " in directory " << sh->GetDir() << " at position " << i <<  endl;
+      << " in directory " << sh->GetDir() << " at position " << i <<  endl;
     }
 
     hists.push_back(arr);
-    if (debug) cout << "SPlotter::GetStacks: Added stack array to collection. " 
-		    << "New size = " << hists.size() << ", old = " << narr << endl;
+    if (debug) cout << "SPlotter::GetStacks: Added stack array to collection. "
+    << "New size = " << hists.size() << ", old = " << narr << endl;
   }
 
   return arr;
@@ -227,7 +227,7 @@ void SPlotter::CopyStyle(TH1& h1, TH1* h2)
   h1.SetMarkerStyle(h2->GetMarkerStyle());
   h1.SetMarkerSize(h2->GetMarkerSize());
   h1.SetMarkerColor(h2->GetMarkerColor());
-  h1.SetLineWidth(h2->GetLineWidth());   
+  h1.SetLineWidth(h2->GetLineWidth());
   h1.SetLineStyle(h2->GetLineStyle());
   h1.SetLineColor(h2->GetLineColor());
   h1.SetFillColor(h2->GetFillColor());
@@ -284,8 +284,8 @@ void SPlotter::Cleanup()
 
 void SPlotter::SetupCanvas()
 {
-  // set up a canvas, different possibilities 
-  // to take into account portrait/landscape 
+  // set up a canvas, different possibilities
+  // to take into account portrait/landscape
   // and ratio/no ratio plots
 
   Int_t CanWidth;
@@ -304,59 +304,59 @@ void SPlotter::SetupCanvas()
   Float_t yplot = 0.3;
   Float_t yratio = 0.17;
 
-                                                //  coordinates:
-                                                //  
+  //  coordinates:
+  //
   // set up the coordinates of the two pads:    //  y6 +-------------+
   Float_t y1, y2, y3, y4, y5, y6;               //     |             |
   y6 = 0.97;                                    //     |     pad1    |
   y5 = y6-yplot;                                //  y5 |-------------|
   y4 = y5-yratio;                               //     |     rp1     |
   y3 = 0.49;                                    //  y4 +-------------+
-  y2 = y3-yplot;                                //  
+  y2 = y3-yplot;                                //
   y1 = y2-yratio;                               //  y3 +-------------+
   Float_t x1, x2;                               //     |             |
   x1 = 0.01;                                    //     |     pad2    |
   x2 = 0.99;                                    //  y2 |-------------|
-                                                //     |     rp2     |
-                                                //  y1 +-------------+
-                                                //     x1            x2
+  //     |     rp2     |
+  //  y1 +-------------+
+  //     x1            x2
 
 
-      
+
   m_rp1_top = new TPad("pad1", "Control Plots 1", x1, y5, x2, y6);
   m_rp1 = new TPad("rp1", "Ratio1", x1, y4, x2, y5);
-  
+
   m_rp2_top = new TPad("pad2", "Control Plots 2", x1, y2, x2, y3);
   m_rp2 = new TPad("rp2", "Ratio2", x1, y1, x2, y2);
-  
+
 
   m_pad1 = new TPad("pad1", "Control Plots 1", x1, y4, x2, y6);
   m_pad2 = new TPad("pad2", "Control Plots 2", x1, y1, x2, y3);
-  
+
   // set margins for portrait mode
   if (bPortrait){
-    
+
     m_pad1->SetTopMargin(0.05); m_pad1->SetBottomMargin(0.16);  m_pad1->SetLeftMargin(0.19); m_pad1->SetRightMargin(0.05);
     m_pad2->SetTopMargin(0.05); m_pad2->SetBottomMargin(0.16);  m_pad2->SetLeftMargin(0.19); m_pad2->SetRightMargin(0.05);
-    
+
     m_rp1_top->SetTopMargin(0.065); m_rp1_top->SetBottomMargin(0.0);  m_rp1_top->SetLeftMargin(0.19); m_rp1_top->SetRightMargin(0.05);
     m_rp2_top->SetTopMargin(0.065); m_rp2_top->SetBottomMargin(0.0);  m_rp2_top->SetLeftMargin(0.19); m_rp2_top->SetRightMargin(0.05);
     m_rp1->SetTopMargin(0.0);    m_rp1->SetBottomMargin(0.35);  m_rp1->SetLeftMargin(0.19);  m_rp1->SetRightMargin(0.05);
-    m_rp2->SetTopMargin(0.0);    m_rp2->SetBottomMargin(0.35);  m_rp2->SetLeftMargin(0.19);  m_rp2->SetRightMargin(0.05);    
-    
-      // margins for landscape
+    m_rp2->SetTopMargin(0.0);    m_rp2->SetBottomMargin(0.35);  m_rp2->SetLeftMargin(0.19);  m_rp2->SetRightMargin(0.05);
+
+    // margins for landscape
   } else {
-    
-    m_rp1_top->SetTopMargin(0.065); m_rp1_top->SetBottomMargin(0.0);  m_rp1_top->SetLeftMargin(0.13); m_rp1_top->SetRightMargin(0.05);        
+
+    m_rp1_top->SetTopMargin(0.065); m_rp1_top->SetBottomMargin(0.0);  m_rp1_top->SetLeftMargin(0.13); m_rp1_top->SetRightMargin(0.05);
     m_rp2_top->SetTopMargin(0.065); m_rp2_top->SetBottomMargin(0.0);  m_rp2_top->SetLeftMargin(0.13); m_rp2_top->SetRightMargin(0.05);
-    
+
     if (bPlotRatio){
-	m_rp1->SetTopMargin(0.0);    m_rp1->SetBottomMargin(0.35);  m_rp1->SetLeftMargin(0.13);  m_rp1->SetRightMargin(0.05);
-	m_rp2->SetTopMargin(0.0);    m_rp2->SetBottomMargin(0.35);  m_rp2->SetLeftMargin(0.13);  m_rp2->SetRightMargin(0.05);
+      m_rp1->SetTopMargin(0.0);    m_rp1->SetBottomMargin(0.35);  m_rp1->SetLeftMargin(0.13);  m_rp1->SetRightMargin(0.05);
+      m_rp2->SetTopMargin(0.0);    m_rp2->SetBottomMargin(0.35);  m_rp2->SetLeftMargin(0.13);  m_rp2->SetRightMargin(0.05);
     }
   }
 
-  
+
   if (debug){
     m_rp1_top->SetFillColor(kYellow);
     m_rp2_top->SetFillColor(kOrange);
@@ -369,9 +369,9 @@ void SPlotter::SetupCanvas()
   m_pad1->Draw();
   m_pad2->Draw();
 
-  m_rp1_top->Draw(); 
+  m_rp1_top->Draw();
   m_rp2_top->Draw();
-  
+
   if (bPlotRatio){
     m_rp1->Draw();
     m_rp2->Draw();
@@ -385,7 +385,7 @@ void SPlotter::SetupCanvasForEPS()
 {
   // set up a canvas for single EPS files
   // optimised plots for including in theses or publications and documents
-  // different possibilities 
+  // different possibilities
   // ratio/no ratio plots
 
   Int_t CanWidth;
@@ -399,36 +399,36 @@ void SPlotter::SetupCanvasForEPS()
   Float_t yplot = 0.65;
   Float_t yratio = 0.34;
 
-                                                //  coordinates:
-  // set up the coordinates of the two pads:    //  			 
-  Float_t y1, y2, y3;                           //  y3 +-------------+	
-  y3 = 0.99;                                    //     |             |	
-  y2 = y3-yplot;                                //     |     pad1    |	
-  y1 = y2-yratio;                               //  y2 |-------------|	
-  Float_t x1, x2;                               //     |     rp1     |	
-  x1 = 0.01;                                    //  y1 +-------------+	
-  x2 = 0.99;                                    //     x1            x2	
-                                                // 			
-                                                // No Pad 2!            
-                                                                                                                                             
-      
+  //  coordinates:
+  // set up the coordinates of the two pads:    //
+  Float_t y1, y2, y3;                           //  y3 +-------------+
+  y3 = 0.99;                                    //     |             |
+  y2 = y3-yplot;                                //     |     pad1    |
+  y1 = y2-yratio;                               //  y2 |-------------|
+  Float_t x1, x2;                               //     |     rp1     |
+  x1 = 0.01;                                    //  y1 +-------------+
+  x2 = 0.99;                                    //     x1            x2
+  //
+  // No Pad 2!
+
+
   m_rp1_top = new TPad("pad1", "Control Plots 2", x1, y2, x2, y3);
   m_rp1 = new TPad("rp1", "Ratio2", x1, y1, x2, y2);
   m_pad1 = new TPad("pad1", "Control Plots 2", x1, y1, x2, y3);
- 
+
   m_rp2_top = new TPad("pad1", "Control Plots 2", x1, y2, x2, y3);
   m_rp2 = new TPad("rp1", "Ratio2", x1, y1, x2, y2);
   m_pad2 = new TPad("pad1", "Control Plots 2", x1, y1, x2, y3);
 
-      
+
   m_pad1->SetTopMargin(0.05); m_pad1->SetBottomMargin(0.16);  m_pad1->SetLeftMargin(0.19); m_pad1->SetRightMargin(0.05);
   m_pad2->SetTopMargin(0.05); m_pad2->SetBottomMargin(0.16);  m_pad2->SetLeftMargin(0.19); m_pad2->SetRightMargin(0.05);
-  
+
   m_rp1_top->SetTopMargin(0.065); m_rp1_top->SetBottomMargin(0.0);  m_rp1_top->SetLeftMargin(0.19); m_rp1_top->SetRightMargin(0.05);
   m_rp2_top->SetTopMargin(0.065); m_rp2_top->SetBottomMargin(0.0);  m_rp2_top->SetLeftMargin(0.19); m_rp2_top->SetRightMargin(0.05);
   m_rp1->SetTopMargin(0.0);    m_rp1->SetBottomMargin(0.35);  m_rp1->SetLeftMargin(0.19);  m_rp1->SetRightMargin(0.05);
-  m_rp2->SetTopMargin(0.0);    m_rp2->SetBottomMargin(0.35);  m_rp2->SetLeftMargin(0.19);  m_rp2->SetRightMargin(0.05);    
-  
+  m_rp2->SetTopMargin(0.0);    m_rp2->SetBottomMargin(0.35);  m_rp2->SetLeftMargin(0.19);  m_rp2->SetRightMargin(0.05);
+
   if (debug){
     m_rp1_top->SetFillColor(kYellow);
     m_rp2_top->SetFillColor(kOrange);
@@ -441,9 +441,9 @@ void SPlotter::SetupCanvasForEPS()
   m_pad1->Draw();
   m_pad2->Draw();
 
-  m_rp1_top->Draw(); 
+  m_rp1_top->Draw();
   m_rp2_top->Draw();
-  
+
   if (bPlotRatio){
     m_rp1->Draw();
     m_rp2->Draw();
@@ -469,9 +469,9 @@ void SPlotter::OpenPostscript(TString dir, TString hname)
     filename.Append("_");
     filename.Append(hname);
     filename.Append(".eps");
-    
+
   } else {
-    
+
     TString text(dir);
     text.Prepend("Plotting all histograms in directory ");
     cout << "\n+-------------------------- SFrame Plotter ---------------------------+" << endl;
@@ -479,7 +479,7 @@ void SPlotter::OpenPostscript(TString dir, TString hname)
     cout <<   "+---------------------------------------------------------------------+" << endl;
     m_page = 0;
   }
-      
+
   m_ps = NULL;
   if (bSingleEPS){
     m_ps = new TPostScript(filename, 113); // eps output
@@ -497,7 +497,7 @@ void SPlotter::OpenPostscript(TString dir, TString hname)
 
 void SPlotter::ClosePostscript()
 {
-  // close the ps file and set page number to 0  
+  // close the ps file and set page number to 0
   if (m_ps){
     m_ps->Close();
     delete m_ps;
@@ -508,7 +508,7 @@ void SPlotter::ClosePostscript()
 
 void SPlotter::ProcessAndPlot(std::vector<TObjArray*> histarr)
 {
-  // loop over all arrays in the input array and plot them 
+  // loop over all arrays in the input array and plot them
 
   if (histarr.size()<1){
     cerr << "SPlotter::ProcessAndPlot: No arrays of histograms given. Abort." << endl;
@@ -519,10 +519,10 @@ void SPlotter::ProcessAndPlot(std::vector<TObjArray*> histarr)
     cerr << "SPlotter::ProcessAndPlot: No histograms given. Abort." << endl;
     exit(EXIT_FAILURE);
   }
-  
+
   if (bPlotRatio && histarr.size()==1){
-    cerr << "SPlotter::ProcessAndPlot: Only one process given, can not plot " 
-	 << " ratio. Steering correct?" << endl;
+    cerr << "SPlotter::ProcessAndPlot: Only one process given, can not plot "
+    << " ratio. Steering correct?" << endl;
     exit(EXIT_FAILURE);
   }
 
@@ -548,34 +548,34 @@ void SPlotter::ProcessAndPlot(std::vector<TObjArray*> histarr)
     if (bScaleToWidth) ScaleToWidth(hists);
 
     int ipad = GetCurrentPad(iplot);
-    
-    if (debug) cout << "Plotting histograms " << hists[0]->GetName() 
-		    << " iplot = " << iplot << " ipad = " << ipad << endl;
-    
+
+    if (debug) cout << "Plotting histograms " << hists[0]->GetName()
+    << " iplot = " << iplot << " ipad = " << ipad << endl;
+
     // new directory? create new ps file for ps-book!
     if (!bSingleEPS){
       TString dir = hists[0]->GetDir();
       if (dir.CompareTo(current_dir)!=0){
-	if (iplot!=1) DrawPageNum();
-	Cleanup();
-	SetupCanvas();
-	OpenPostscript(dir);
-	current_dir = dir;
-	iplot = 1;
-	ipad = 1;
-	bleg = true;
+        if (iplot!=1) DrawPageNum();
+        Cleanup();
+        SetupCanvas();
+        OpenPostscript(dir);
+        current_dir = dir;
+        iplot = 1;
+        ipad = 1;
+        bleg = true;
       }
 
       // new page every second plot
       if (iplot%2==1){
-	if (debug) cout << "Creating new page with number " << m_page << endl;
-	DrawPageNum();
-	if (need_update) m_can->Update();
-	m_ps->NewPage();
-	++m_page;
+        if (debug) cout << "Creating new page with number " << m_page << endl;
+        DrawPageNum();
+        if (need_update) m_can->Update();
+        m_ps->NewPage();
+        ++m_page;
       }
 
-    // new file for each plot in single EPS mode
+      // new file for each plot in single EPS mode
     } else {
       TString dir = hists[0]->GetDir();
       TString hname = hists[0]->GetName();
@@ -585,7 +585,7 @@ void SPlotter::ProcessAndPlot(std::vector<TObjArray*> histarr)
       OpenPostscript(dir, hname);
       current_dir = dir;
       iplot = 1;
-      bleg = true;          
+      bleg = true;
     }
 
     // cosmetics
@@ -594,25 +594,25 @@ void SPlotter::ProcessAndPlot(std::vector<TObjArray*> histarr)
     // ---------- do what we set out to do: plot! ----------------
 
     if (hists[0]->IsYieldPlot()){  // special treatment for lumi yield plot
-    
+
       PlotLumiYield(hists[0], ipad);
 
     } else { // usual plots
-      
+
       PlotHists(hists, ipad);
-      // draw a legend     
+      // draw a legend
       if (bleg){
-	DrawLegend(GetHistsAtIndex(histarr, i));
-	if (!bDrawLegend) bleg = false;
+        DrawLegend(GetHistsAtIndex(histarr, i));
+        if (!bDrawLegend) bleg = false;
       }
       // draw lumi information
       if (bDrawLumi) DrawLumi();
       // draw the ratio
       if (bPlotRatio){
-	if (bZScoreInRatio) PlotZScore(hists, ipad);
-	else PlotRatios(hists, ipad);
+        if (bZScoreInRatio) PlotZScore(hists, ipad);
+        else PlotRatios(hists, ipad);
       }
-    
+
     }
 
     ++iplot;
@@ -622,8 +622,8 @@ void SPlotter::ProcessAndPlot(std::vector<TObjArray*> histarr)
   if (!bSingleEPS) DrawPageNum();
 
   if (need_update) m_can->Update();
-  Cleanup(); 
-  
+  Cleanup();
+
 }
 
 void SPlotter::PlotLumiYield(SHist* hist, int ipad)
@@ -654,11 +654,11 @@ void SPlotter::PlotLumiYield(SHist* hist, int ipad)
     if (h->GetBinContent(i)>0){
       double dev = TMath::Abs( (h->GetBinContent(i) - av)/h->GetBinError(i) );
       if (dev<4){
-	sum += h->GetBinContent(i);
-	bins++;
+        sum += h->GetBinContent(i);
+        bins++;
       } else {
-	cout << "Lumi yield: outlier in bin " << i << " with content " << h->GetBinContent(i) << " average = " << av << endl;
-      } 
+        cout << "Lumi yield: outlier in bin " << i << " with content " << h->GetBinContent(i) << " average = " << av << endl;
+      }
     }
   }
   av = sum / bins;
@@ -670,14 +670,14 @@ void SPlotter::PlotLumiYield(SHist* hist, int ipad)
     if (h->GetBinContent(i)>0){
       double pull = (h->GetBinContent(i) - av)/h->GetBinError(i);
       if (TMath::Abs(pull)<4){
-	dev += TMath::Power(h->GetBinContent(i)-av, 2);
-	chi2 += pull*pull;
+        dev += TMath::Power(h->GetBinContent(i)-av, 2);
+        chi2 += pull*pull;
       }
     }
   }
   double err = TMath::Sqrt(dev/bins);
 
-  // highlight points with deviations of more than 3, 4 and 5 sigma 
+  // highlight points with deviations of more than 3, 4 and 5 sigma
   double xr = h->GetXaxis()->GetXmax() - h->GetXaxis()->GetXmin();
   double wi = gPad->GetAbsWNDC() * (1 - gPad->GetLeftMargin() - gPad->GetRightMargin());
   double he = gPad->GetAbsHNDC() * (1 - gPad->GetTopMargin() - gPad->GetBottomMargin());
@@ -691,20 +691,20 @@ void SPlotter::PlotLumiYield(SHist* hist, int ipad)
     if (h->GetBinContent(i)>0){
       double pull = (h->GetBinContent(i) - av)/h->GetBinError(i);
       if (TMath::Abs(pull)>5){
-	TEllipse* circ = new TEllipse(h->GetXaxis()->GetBinCenter(i), h->GetBinContent(i), r1, r2);
-	circ->SetFillColor(kWhite);
-	circ->SetLineColor(kRed);
-	circ->Draw();
+        TEllipse* circ = new TEllipse(h->GetXaxis()->GetBinCenter(i), h->GetBinContent(i), r1, r2);
+        circ->SetFillColor(kWhite);
+        circ->SetLineColor(kRed);
+        circ->Draw();
       } else if (TMath::Abs(pull)>4){
-	TEllipse* circ = new TEllipse(h->GetXaxis()->GetBinCenter(i), h->GetBinContent(i), r1, r2);
-	circ->SetFillColor(kWhite);
-	circ->SetLineColor(kOrange);
-	circ->Draw();
+        TEllipse* circ = new TEllipse(h->GetXaxis()->GetBinCenter(i), h->GetBinContent(i), r1, r2);
+        circ->SetFillColor(kWhite);
+        circ->SetLineColor(kOrange);
+        circ->Draw();
       } else if (TMath::Abs(pull)>3){
-	TEllipse* circ = new TEllipse(h->GetXaxis()->GetBinCenter(i), h->GetBinContent(i), r1, r2);
-	circ->SetFillColor(kWhite);
-	circ->SetLineColor(kSpring);
-	circ->Draw();
+        TEllipse* circ = new TEllipse(h->GetXaxis()->GetBinCenter(i), h->GetBinContent(i), r1, r2);
+        circ->SetFillColor(kWhite);
+        circ->SetLineColor(kSpring);
+        circ->Draw();
       }
     }
   }
@@ -795,10 +795,10 @@ void SPlotter::PlotHists(vector<SHist*> hists, int ipad)
       TList* hists = sstack->GetStack()->GetHists();
       // calculate individual area
       for (int i=0; i<hists->GetSize(); ++i){
-	TH1* h = (TH1*) hists->At(i);
-	int iend = h->GetNbinsX();
-	double area = h->Integral(1,iend);
-	cout << "  entries of histogram " << i << " in stack = " << area << endl;
+        TH1* h = (TH1*) hists->At(i);
+        int iend = h->GetNbinsX();
+        double area = h->Integral(1,iend);
+        cout << "  entries of histogram " << i << " in stack = " << area << endl;
       }
     }
   }
@@ -814,19 +814,19 @@ void SPlotter::PlotHists(vector<SHist*> hists, int ipad)
     else sh->Draw("same");
     ++ndrawn;
   }
- 
+
   // now draw the stack
   if (sstack){
     if (ndrawn==0){
       sstack->Draw();
       StackCosmetics(sstack->GetStack());
       gPad->Update();
-      need_update = false;    
+      need_update = false;
     } else {
       sstack->Draw("same");
     }
   }
- 
+
   // second round
   for (int i=0; i<nh; ++i){
     SHist* sh = hists[i];
@@ -844,21 +844,21 @@ void SPlotter::PlotHists(vector<SHist*> hists, int ipad)
   if (sdata) sdata->Draw("same");
 
   gPad->RedrawAxis();
-  
+
 }
 
 void SPlotter::DrawSysError(SHist* stack)
 {
   // plot an error band corresponding to the overall
   // systematic error
-  // if a theta file is used as input with shape variations, 
+  // if a theta file is used as input with shape variations,
   // also the error from those is drawn
   TH1* h = (TH1*) stack->GetStack()->GetStack()->At( stack->GetStack()->GetStack()->GetEntries()-1 );
   //TH1* e = (TH1*) h->Clone();
   TGraphAsymmErrors* eAsym = new TGraphAsymmErrors();
 
   for (Int_t i=1; i<h->GetNbinsX()+1; ++i){
-    Double_t sys = 0; 
+    Double_t sys = 0;
     if (m_syserr>0) sys = m_syserr*h->GetBinContent(i);
     Double_t stat = h->GetBinError(i);
     Double_t norm_err = CalcNormErrorForBin(stack, i);
@@ -868,11 +868,11 @@ void SPlotter::DrawSysError(SHist* stack)
     Double_t ey_up = TMath::Sqrt(norm_err*norm_err + sys*sys + stat*stat + sys_err_plus*sys_err_plus);
     Double_t ex_low = (h->GetXaxis()->GetBinCenter(i)) - (h->GetXaxis()->GetBinLowEdge(i));
     Double_t ex_up =  (h->GetXaxis()->GetBinUpEdge(i))-h->GetXaxis()->GetBinCenter(i);
-    eAsym -> SetPoint(i, h->GetXaxis()->GetBinCenter(i), h->GetBinContent(i)); 
-    eAsym -> SetPointError(i, ex_low, ex_up, ey_low, ey_up); 
-   
+    eAsym -> SetPoint(i, h->GetXaxis()->GetBinCenter(i), h->GetBinContent(i));
+    eAsym -> SetPointError(i, ex_low, ex_up, ey_low, ey_up);
+
   }
-   
+
   static Int_t LightGray     = TColor::GetColor( "#aaaaaa" );
   //h->SetFillColor(kGray+2);
   eAsym->SetFillColor(LightGray);
@@ -887,7 +887,7 @@ double SPlotter::CalcNormErrorForBin(SHist* stack, int ibin)
 {
   // calculate the normalisation uncertainty of a single bin in the stack
   // due to normalisation uncertainty on different processes
-  
+
   double err = 0;
   double err2 = 0;
   for (int i=0; i<stack->GetStack()->GetStack()->GetEntries(); ++i){
@@ -907,68 +907,68 @@ double SPlotter::CalcShapeSysErrorForBinFromTheta(SHist* stack, int ibin, TStrin
   double squarederr = 0;
   double err = 0;
   if (m_shapesys_arr.size()==0)//no systamtics given in theta file
-    return err;
+  return err;
 
   if (sign!="plus" && sign!="minus"){
     cout << "error in call to CalcShapeSysErrorForBinFromTheta: sign can only be 'plus' or 'minus', no systematic error will be calculated" << endl;
     return err;
   }
-    
+
   // loop over all background samples to find the process
-  for (int i=0; i<stack->GetStack()->GetStack()->GetEntries(); ++i){  
+  for (int i=0; i<stack->GetStack()->GetStack()->GetEntries(); ++i){
     TH1* h = (TH1*) stack->GetStack()->GetHists()->At(i);
     TString histname = h->GetName(); //e.g. HT__QCD
     histname.ReplaceAll("__", "#");
     TObjArray* histnamePieces = histname.Tokenize("#");
     TString variableName =  ((TObjString*)histnamePieces->At(0))-> GetString(); //this is the sample name e.g. HT
     TString sampleName =  ((TObjString*)histnamePieces->At(1))-> GetString(); //this is the sample name e.g. QCD or TTbar
-    
+
     // loop over all systematic error samples
     for (unsigned int syst = 0; syst < m_shapesys_arr.size(); ++syst){
       TObjArray* arr = m_shapesys_arr[syst];
       for (int nplots = 0; nplots < arr->GetEntries(); ++nplots){
-	SHist* hSys = (SHist*)arr->At(nplots);
-	TH1* hSyst = hSys->GetHist();
-	TString systFullName = hSys -> GetProcessName();//e.g. QCD__uncert__plus
+        SHist* hSys = (SHist*)arr->At(nplots);
+        TH1* hSyst = hSys->GetHist();
+        TString systFullName = hSys -> GetProcessName();//e.g. QCD__uncert__plus
 
-	systFullName.ReplaceAll("__","#");
-	TObjArray* systFullNamePieces = systFullName.Tokenize("#");
-	TString systVariableName = hSys -> GetName();       
+        systFullName.ReplaceAll("__","#");
+        TObjArray* systFullNamePieces = systFullName.Tokenize("#");
+        TString systVariableName = hSys -> GetName();
 
-	// continue if the channel of the systematic sample has the same name as the channel of the background process
-	if (variableName == systVariableName){
+        // continue if the channel of the systematic sample has the same name as the channel of the background process
+        if (variableName == systVariableName){
 
-	  // check if the the sign is the same as requested
-	  TString syssign = ((TObjString*) systFullNamePieces->At(2))->GetString();
-	  if (syssign == sign){
-	 
-	    // check if systematic uncertainty comes from the same sample as the background (e.g. ttbar)
-	    if (systFullNamePieces->Contains(sampleName)){
-	      absoluteerr = (hSyst->GetBinContent(ibin))-(h->GetBinContent(ibin));
-	      
-	      // the second one contains the name of the uncertainty: check if the error should be reduced
-	      TString sysname = ((TObjString*) systFullNamePieces->At(1))->GetString();
-	      
-	      // loop over systematics that should be reduced, find the right factor
-	      for (Int_t j=0; j<m_ScaleSysUncName->GetEntries(); ++j){
-		TString sysname_to_red = ((TObjString*) m_ScaleSysUncName->At(j))->GetString();
-		if (sysname == sysname_to_red){		
-		  absoluteerr *= m_sysweight.At(j);
-		}
-	      }
-	      
-	      // got it: add to the total error in quadrature
-	      squarederr += absoluteerr*absoluteerr;	   
-	      
-	    }
-	  }	  
-	}
+          // check if the the sign is the same as requested
+          TString syssign = ((TObjString*) systFullNamePieces->At(2))->GetString();
+          if (syssign == sign){
+
+            // check if systematic uncertainty comes from the same sample as the background (e.g. ttbar)
+            if (systFullNamePieces->Contains(sampleName)){
+              absoluteerr = (hSyst->GetBinContent(ibin))-(h->GetBinContent(ibin));
+
+              // the second one contains the name of the uncertainty: check if the error should be reduced
+              TString sysname = ((TObjString*) systFullNamePieces->At(1))->GetString();
+
+              // loop over systematics that should be reduced, find the right factor
+              for (Int_t j=0; j<m_ScaleSysUncName->GetEntries(); ++j){
+                TString sysname_to_red = ((TObjString*) m_ScaleSysUncName->At(j))->GetString();
+                if (sysname == sysname_to_red){
+                  absoluteerr *= m_sysweight.At(j);
+                }
+              }
+
+              // got it: add to the total error in quadrature
+              squarederr += absoluteerr*absoluteerr;
+
+            }
+          }
+        }
       }
-    }    
+    }
   }
   err = TMath::Sqrt(squarederr);
   return err;
-  
+
 }
 
 void SPlotter::PlotRatios(vector<SHist*> hists, int ipad)
@@ -995,9 +995,16 @@ void SPlotter::PlotRatios(vector<SHist*> hists, int ipad)
     else rh->Draw("same");
     ++ndrawn;
   }
- 
+
+  double xmin = ratios[0]->GetHist()->GetBinLowEdge(1);
+  double xmax = ratios[0]->GetHist()->GetBinLowEdge(ratios[0]->GetHist()->GetNbinsX()+1);
+  TLine* l_unity = new TLine(xmin, 1, xmax, 1);
+  l_unity->SetLineColor(kBlack);
+  l_unity->SetLineWidth(2);
+  l_unity->SetLineStyle(2);
+  l_unity->Draw("Same");
   gPad->RedrawAxis();
-  
+
 }
 
 
@@ -1011,14 +1018,14 @@ vector<SHist*> SPlotter::CalcRatios(vector<SHist*> hists)
   // first get the basic histograms
   SHist* sstack = SelStack(hists);
   SHist* sdata  = SelData(hists);
-  
+
   vector<SHist*> ratios;
 
   // TODO: ratio if neither stack nor data exist
-  if (!sstack || !sdata){    
+  if (!sstack || !sdata){
     return ratios;
   }
-  
+
   SHist* rd = (SHist*) sdata->Duplicate();
   TH1D*  rdhist = (TH1D*) rd->GetHist();
 
@@ -1034,7 +1041,10 @@ vector<SHist*> SPlotter::CalcRatios(vector<SHist*> hists)
     Double_t rel_err = err / val;
     rdhist->SetBinError(ibin, rel_err * rdhist->GetBinContent(ibin) );
   }
-  rdhist->GetYaxis()->SetTitle(rd->GetProcessName() + " / BG");
+  if(rd->GetProcessName().Contains("DATA")){
+    rdhist->GetYaxis()->SetTitle("Data / Pred.");
+  }
+  else rdhist->GetYaxis()->SetTitle(rd->GetProcessName() + " / Pred.");
   if (bSingleEPS){
     SingleEPSRatioCosmetics(rdhist);
   } else {
@@ -1057,7 +1067,7 @@ vector<SHist*> SPlotter::CalcRatios(vector<SHist*> hists)
     Double_t val = denom->GetBinContent(ibin);
     Double_t err = denom->GetBinError(ibin);
     MCstat->SetBinContent(ibin,  1.0);
-    MCstat->SetBinError(ibin,  err/val);    
+    MCstat->SetBinError(ibin,  err/val);
 
     Double_t sys = 0;
     if (m_syserr>0) sys = m_syserr;
@@ -1079,17 +1089,17 @@ vector<SHist*> SPlotter::CalcRatios(vector<SHist*> hists)
     Double_t ey_up = TMath::Sqrt(norm_err*norm_err + sys*sys +err/val*err/val + sys_err_plus/val*sys_err_plus/val);
     Double_t ex_low = (denom->GetXaxis()->GetBinCenter(ibin)) - (denom->GetXaxis()->GetBinLowEdge(ibin));
     Double_t ex_up =  (denom->GetXaxis()->GetBinUpEdge(ibin))-denom->GetXaxis()->GetBinCenter(ibin);
-    eAsym -> SetPoint(ibin, denom->GetXaxis()->GetBinCenter(ibin), 1.); 
-    eAsym -> SetPointError(ibin, ex_low, ex_up, ey_low, ey_up); 
+    eAsym -> SetPoint(ibin, denom->GetXaxis()->GetBinCenter(ibin), 1.);
+    eAsym -> SetPointError(ibin, ex_low, ex_up, ey_low, ey_up);
 
     // set error to 0 for empty bins
     if (bIgnoreEmptyBins && val<0.1){
       //cout << "no MC in bin " << ibin << " lower = " << denom->GetXaxis()->GetBinLowEdge(ibin) << " upper = " << denom->GetXaxis()->GetBinUpEdge(ibin) << endl;
       MCstat->SetBinError(ibin, 0.);
       MCtot->SetBinError(ibin, 0.);
-      eAsym -> SetPointError(ibin, ex_low, ex_up, 0, 0); 
+      eAsym -> SetPointError(ibin, ex_low, ex_up, 0, 0);
     }
-   
+
   }
 
   //static Int_t VLightGray    = TColor::GetColor( "#eeeeee" );
@@ -1122,8 +1132,8 @@ vector<SHist*> SPlotter::CalcRatios(vector<SHist*> hists)
 
   ratios.push_back(mctot);
   ratios.push_back(mcerr);
-  ratios.push_back(rd);	  
- 
+  ratios.push_back(rd);
+
   return ratios;
 
 }
@@ -1147,9 +1157,9 @@ void SPlotter::PlotZScore(vector<SHist*> hists, int ipad)
     SHist* rh = ratios[i];
     TString name = rh->GetName();
     if (name.Contains("_lx")) gPad->SetLogx(1);
-    if (ndrawn==0) rh->Draw();      
+    if (ndrawn==0) rh->Draw();
     else rh->Draw("same");
-    
+
     ++ndrawn;
   }
 
@@ -1167,13 +1177,13 @@ void SPlotter::PlotZScore(vector<SHist*> hists, int ipad)
 
   upl->SetLineStyle(kDotted);
   downl->SetLineStyle(kDotted);
-  
+
   zerol->Draw();
   upl->Draw();
   downl->Draw();
- 
+
   gPad->RedrawAxis();
-  
+
 }
 
 vector<SHist*> SPlotter::CalcZScore(vector<SHist*> hists)
@@ -1186,14 +1196,14 @@ vector<SHist*> SPlotter::CalcZScore(vector<SHist*> hists)
   // first get the basic histograms
   SHist* sstack = SelStack(hists);
   SHist* sdata  = SelData(hists);
-  
+
   vector<SHist*> scores;
 
   // TODO: score if neither stack nor data exist
-  if (!sstack || !sdata){    
+  if (!sstack || !sdata){
     return scores;
   }
-  
+
   // observed
   TH1D*  obshist = (TH1D*) sdata->GetHist();
 
@@ -1241,8 +1251,8 @@ vector<SHist*> SPlotter::CalcZScore(vector<SHist*> hists)
     double sys_err_tot = ( fabs(sys_err_plus) + fabs(sys_err_minus) ) / 2.;
 
     tot_err2 += sys_err_tot*sys_err_tot;
-    
-    experrhist->SetBinError(ibin, TMath::Sqrt(tot_err2));   
+
+    experrhist->SetBinError(ibin, TMath::Sqrt(tot_err2));
   }
 
   // calculate Z-score for each bin
@@ -1262,10 +1272,10 @@ vector<SHist*> SPlotter::CalcZScore(vector<SHist*> hists)
     expdist.Scale(1./expdist.Integral());
 
     double integXtoInf = expdist.Integral(expdist.FindFixBin(vobs)+1,expdist.GetNbinsX());
-    integXtoInf += expdist.GetBinContent(expdist.FindFixBin(vobs))*0.5; // add half of the bin content because of binning 
+    integXtoInf += expdist.GetBinContent(expdist.FindFixBin(vobs))*0.5; // add half of the bin content because of binning
     double pvalue = 1-integXtoInf;
     double vzscore = TMath::NormQuantile(pvalue);
-    //double zscore = (vobs-vexp)/verr_exp; // naive definition, would also work (and we would not need to dice)   
+    //double zscore = (vobs-vexp)/verr_exp; // naive definition, would also work (and we would not need to dice)
 
     // save the histograms for debugging
     TString fname = TString::Format("temp_%i.root", ibin);
@@ -1307,45 +1317,292 @@ vector<SHist*> SPlotter::CalcZScore(vector<SHist*> hists)
   scores.push_back(mctot);
   scores.push_back(mcerr);
   scores.push_back(zscore);
- 
+
   return scores;
 }
 
 
 void SPlotter::DrawLegend(vector<SHist*> hists)
 {
-  // draw a legend  
+  // draw a legend
 
+  int n_entries_in_leg = 3;
   int narr = hists.size();
-  float yfrac = 0.06;
-  if (!bPlotRatio) yfrac = 0.05;
+  double xleft = 0.5;
+  double xright = 0.92;
 
-  float top = 0.89;
-  if (!bPlotRatio && bDrawLumi) top = 0.86;
-  if (bSingleEPS){
-    top = 0.92;
-    if (bPlotRatio) top = 0.88;
-    if (bDrawLumi) top = 0.84;
+  // // ?????
+  // bool isMLQ = false;
+  // xleft = 0.37;
+  // xright = 0.85;
+  // double xwidth1 = 0.15;
+  // if(!isMLQ) xwidth1 = 0.15;
+  // double xwidth2 = 0.15;
+  // double shift2 = 0.04;
+  // if(!isMLQ) shift2 = 0.01;
+  // double yheight1 = 0.21;
+  // double yheight2 = 0.21;
+  // if(!isMLQ) yheight2 = 0.14;
+  // double yheight3 = 0.21;
+  // double ytop1 = 0.89;
+  // double ytop2 = 0.89;
+  // if(!isMLQ) ytop2 = 0.82;
+  // double ytop3 = 0.89;
+
+  // // Paper plots without CMS tag, MLQ = true/false
+  // bool isMLQ = false;
+  // xleft = 0.27;
+  // xright = 0.92;
+  // double xwidth1 = 0.18;
+  // double xwidth2 = 0.18;
+  // double shift2 = 0.00;
+  // double shift3 = 0.02;
+  // if(!isMLQ) shift2 = 0.02;
+  // double yheight1 = 0.18;
+  // double yheight2 = 0.18;
+  // if(!isMLQ) yheight2 = 0.12;
+  // double yheight3 = 0.18;
+  // double ytop1 = 0.87;
+  // double ytop2 = 0.87;
+  // if(!isMLQ) ytop2 = 0.81;
+  // double ytop3 = 0.87;
+
+  //TagProbe Plots
+  n_entries_in_leg = 4;
+  bool isMLQ = true;
+  xleft = 0.5;
+  xright = 0.92;
+  double xwidth1 = (xright-xleft)/2.;
+  double xwidth2 = (xright-xleft)/2.;
+  double shift2 = 0.00;
+  double shift3 = 0.05;
+  double yheight1 = 0.24;
+  double yheight2 = 0.24;
+  double yheight3 = 0.24;
+  double ytop1 = 0.87;
+  double ytop2 = 0.87;
+  double ytop3 = 0.87;
+
+  // //HFLepton Plots
+  // bool isMLQ = true;
+  // xleft = 0.5;
+  // xright = 0.92;
+  // double xwidth1 = (xright-xleft)/2.;
+  // double xwidth2 = (xright-xleft)/2.;
+  // double shift2 = 0.00;
+  // double shift3 = 0.05;
+  // double yheight1 = 0.24;
+  // double yheight2 = 0.12;
+  // double yheight3 = 0.18;
+  // double ytop1 = 0.87;
+  // double ytop2 = 0.87;
+  // double ytop3 = 0.87;
+
+  // //FakeRateDiboson Plots
+  // bool isMLQ = true;
+  // n_entries_in_leg = 3;
+  // xleft = 0.5;
+  // xright = 0.92;
+  // double xwidth1 = (xright-xleft)/2.;
+  // double xwidth2 = (xright-xleft)/2.;
+  // double shift2 = 0.00;
+  // double shift3 = 0.05;
+  // double yheight1 = 0.18;
+  // double yheight2 = 0.18;
+  // double yheight3 = 0.18;
+  // double ytop1 = 0.87;
+  // double ytop2 = 0.87;
+  // double ytop3 = 0.87;
+
+  // //FakeRateElectron Plots
+  // bool isMLQ = true;
+  // n_entries_in_leg = 2;
+  // //without data, for ele/muon types plot
+  // // n_entries_in_leg = 3;
+  // xleft = 0.5;
+  // //without data, for ele/muon types plot
+  // // xleft = 0.5 + (0.92-0.5)/2;
+  // xright = 0.92;
+  // double xwidth1 = (xright-xleft)/2.;
+  // double xwidth2 = (xright-xleft)/2.;
+  // //without data, for ele/muon types plot
+  // // xwidth1 = (xright-xleft);
+  // // xwidth2 = 0.001;
+  // double shift2 = 0.00;
+  // double shift3 = 0.05;
+  // double yheight1 = 0.12;
+  // //without data, for ele/muon types plot
+  // // yheight1 = 0.18;
+  // double yheight2 = 0.12;
+  // double yheight3 = 0.18;
+  // double ytop1 = 0.87;
+  // double ytop2 = 0.87;
+  // double ytop3 = 0.87;
+
+  // //Alpha VR data-driven Plots
+  // n_entries_in_leg = 3;
+  // bool isMLQ = true;
+  // xleft = 0.5;
+  // xright = 0.92;
+  // double xwidth1 = (xright-xleft)/2.;
+  // double xwidth2 = (xright-xleft)/2.;
+  // double shift2 = 0.00;
+  // double shift3 = 0.05;
+  // double yheight1 = 0.18;
+  // double yheight2 = 0.12;
+  // double yheight3 = 0.18;
+  // double ytop1 = 0.87;
+  // double ytop2 = 0.87;
+  // double ytop3 = 0.87;
+
+  // //Alpha VR MC Plots
+  // n_entries_in_leg = 3;
+  // bool isMLQ = true;
+  // xleft = 0.5;
+  // xright = 0.92;
+  // double xwidth1 = (xright-xleft)/2.;
+  // double xwidth2 = (xright-xleft)/2.;
+  // double shift2 = 0.00;
+  // double shift3 = 0.05;
+  // double yheight1 = 0.18;
+  // double yheight2 = 0.18;
+  // double yheight3 = 0.18;
+  // double ytop1 = 0.87;
+  // double ytop2 = 0.87;
+  // double ytop3 = 0.87;
+
+  // //Preselection Plots without data
+  // n_entries_in_leg = 4;
+  // bool isMLQ = false;
+  // xleft = 0.22;
+  // xright = 0.92;
+  // double xwidth1 = 0.18;
+  // double xwidth2 = 0.18;
+  // double shift2 = 0.00;
+  // double shift3 = 0.02;
+  // double yheight1 = 0.20;
+  // double yheight2 = 0.15;
+  // double yheight3 = 0.15;
+  // double ytop1 = 0.92;
+  // double ytop2 = 0.87;
+  // double ytop3 = 0.87;
+
+  // // Fullselection Plots without data, without minor
+  // bool isMLQ = false;
+  // xleft = 0.22;
+  // xright = 0.92;
+  // double xwidth1 = 0.18;
+  // double xwidth2 = 0.18;
+  // double shift2 = 0.00;
+  // double shift3 = 0.02;
+  // double yheight1 = 0.20;
+  // double yheight2 = 0.15;
+  // double yheight3 = 0.15;
+  // double ytop1 = 0.92;
+  // double ytop2 = 0.87;
+  // double ytop3 = 0.87;
+
+  // //Sideband Control Plots Fullsel
+  // n_entries_in_leg = 3;
+  // bool isMLQ = true;
+  // xleft = 0.5;
+  // xright = 0.92;
+  // double xwidth1 = (xright-xleft)/2.;
+  // double xwidth2 = (xright-xleft)/2.;
+  // double shift2 = 0.00;
+  // double shift3 = 0.05;
+  // double yheight1 = 0.18;
+  // double yheight2 = 0.18;
+  // double yheight3 = 0.18;
+  // double ytop1 = 0.87;
+  // double ytop2 = 0.87;
+  // double ytop3 = 0.87;
+
+  // //Sideband Shape comparisons
+  // n_entries_in_leg = 2;
+  // bool isMLQ = true;
+  // xleft = 0.71;
+  // xright = 0.92;
+  // double xwidth1 = (xright-xleft);
+  // double xwidth2 = 0.01;
+  // double shift2 = 0.00;
+  // double shift3 = 0.05;
+  // double yheight1 = 0.12;
+  // double yheight2 = 0.12;
+  // double yheight3 = 0.12;
+  // double ytop1 = 0.87;
+  // double ytop2 = 0.87;
+  // double ytop3 = 0.87;
+
+  // //SingleTth
+  // n_entries_in_leg = 3;
+  // bool isMLQ = true;
+  // xleft = 0.22;
+  // xright = 0.92;
+  // double xwidth1 = 0.18;
+  // double xwidth2 = 0.18;
+  // double shift2 = 0.00;
+  // double shift3 = 0.05;
+  // double yheight1 = 0.18;
+  // double yheight2 = 0.18;
+  // double yheight3 = 0.18;
+  // double ytop1 = 0.87;
+  // double ytop2 = 0.87;
+  // double ytop3 = 0.87;
+
+
+
+
+
+
+
+
+
+
+
+  if (!bPlotRatio){
+    n_entries_in_leg = 3;
+    isMLQ = false;
+    xleft = 0.22;
+    xright = 0.85;
+    xwidth1 = 0.15;
+    xwidth2 = 0.15;
+    shift2 = -0.02;
+    shift3 = 0.00;
+    yheight1 = 0.15;
+    yheight2 = 0.10;
+    yheight3 = 0.15;
+    ytop1 = 0.93;
+    ytop2 = 0.88;
+    ytop3 = 0.93;
+
   }
-  float ysize = yfrac*narr;
-  float xleft = 0.7;
-  if (bSingleEPS) xleft = 0.6;
-  float xright = 0.92;
-  if (!bPortrait){
-    top = 0.99;
-    ysize = 0.07*narr;
-    xleft = 0.72;
-    xright = 0.96;
-  }
-	
-  TLegend *leg = new TLegend(xleft,top-ysize,xright,top, NULL,"brNDC");
+
+  TLegend *leg = new TLegend(xleft, ytop1-yheight1, xleft+xwidth1, ytop1, NULL, "brNDC"); //x: -0.03 or -0.07 or -0.01   --   y: -0.015 or -0.00
+  TLegend *leg2 = new TLegend(xleft+xwidth1-shift2, ytop2-yheight2, xleft+xwidth1+xwidth2-shift2, ytop2, NULL, "brNDC");
+  TLegend *leg3 = new TLegend(xleft+xwidth1+xwidth2-shift2-shift3, ytop3-yheight3, xright, ytop3, NULL, "brNDC");
   leg->SetFillColor(0);
   leg->SetLineColor(1);
   leg->SetBorderSize(0);
   leg->SetTextFont(42);
   leg->SetFillStyle(0);
-  if (bSingleEPS) leg->SetTextSize(0.025);
+  leg2->SetFillColor(0);
+  leg2->SetLineColor(1);
+  leg2->SetBorderSize(0);
+  leg2->SetTextFont(42);
+  leg2->SetFillStyle(0);
+  leg3->SetFillColor(0);
+  leg3->SetLineColor(1);
+  leg3->SetBorderSize(0);
+  leg3->SetTextFont(42);
+  leg3->SetFillStyle(0);
+  if (bSingleEPS){
+    leg->SetTextSize(0.045); //0.045 -- 0.035
+    leg2->SetTextSize(0.045);
+    leg3->SetTextSize(0.045);
+  }
 
+  int i_max = 0;
   for (Int_t i=0; i<narr; ++i){
     SHist* sh = hists[i];
     if (sh->IsStack()) continue;
@@ -1357,39 +1614,151 @@ void SPlotter::DrawLegend(vector<SHist*> hists)
     int lstyle = sh->GetHist()->GetLineStyle();
 
     if (marker>0){
-      entry = leg->AddEntry(legname, legtitle, "lpe");
+      if(isMLQ){
+        if(i<n_entries_in_leg) entry = leg->AddEntry(legname, legtitle, "lpe");
+        else if(i>=n_entries_in_leg && i < 2*n_entries_in_leg) entry = leg2->AddEntry(legname, legtitle, "lpe");
+        else entry = leg3->AddEntry(legname, legtitle, "lpe");
+      }
+      else{
+        if(i<n_entries_in_leg) entry = leg->AddEntry(legname, legtitle, "lpe");
+        else if(i>=n_entries_in_leg && i < 2*n_entries_in_leg-1) entry = leg2->AddEntry(legname, legtitle, "lpe");
+        else entry = leg3->AddEntry(legname, legtitle, "lpe");
+      }
       entry->SetLineWidth(1);
       entry->SetLineColor(sh->GetHist()->GetLineColor());
       entry->SetMarkerColor(sh->GetHist()->GetLineColor());
       entry->SetMarkerStyle(marker);
       entry->SetMarkerSize(1.0);
-      if (bSingleEPS) entry->SetMarkerSize(0.8);
-    } else {
-      
+      if (bSingleEPS) entry->SetMarkerSize(0.6); // 0.8
+
+    }
+    else {
+
       if (sh->IsUsedInStack()){
-	entry = leg->AddEntry(legname, legtitle, "f");
-	entry->SetLineWidth(1);
-	entry->SetLineColor(sh->GetHist()->GetLineColor());
-	entry->SetFillColor(sh->GetHist()->GetLineColor());
-	entry->SetFillStyle(1001);
+        if(isMLQ){
+          if(i<n_entries_in_leg) entry = leg->AddEntry(legname, legtitle, "f");
+          else if(i>=n_entries_in_leg && i < 2*n_entries_in_leg) entry = leg2->AddEntry(legname, legtitle, "f");
+          else entry = leg3->AddEntry(legname, legtitle, "f");
+        }
+        else{
+          if(i<n_entries_in_leg) entry = leg->AddEntry(legname, legtitle, "f");
+          else if(i>=n_entries_in_leg && i < 2*n_entries_in_leg-1) entry = leg2->AddEntry(legname, legtitle, "f");
+          else entry = leg3->AddEntry(legname, legtitle, "f");
+        }
+        entry->SetLineWidth(1);
+        entry->SetLineColor(sh->GetHist()->GetLineColor());
+        entry->SetFillColor(sh->GetHist()->GetLineColor());
+        entry->SetFillStyle(1001);
 
       } else {
-	entry = leg->AddEntry(legname, legtitle, "l");
-	entry->SetLineColor(sh->GetHist()->GetLineColor());
-	entry->SetMarkerStyle(0);
-	entry->SetMarkerSize(0);
-	entry->SetMarkerColor(sh->GetHist()->GetLineColor());
-	entry->SetLineWidth(2);
-	entry->SetLineStyle(lstyle);
-      
+        if(isMLQ){
+          if(i<n_entries_in_leg) entry = leg->AddEntry(legname, legtitle, "l");
+          else if(i>=n_entries_in_leg && i < 2*n_entries_in_leg) entry = leg2->AddEntry(legname, legtitle, "l");
+          else entry = leg3->AddEntry(legname, legtitle, "l");
+        }
+        else{
+          if(i<n_entries_in_leg) entry = leg->AddEntry(legname, legtitle, "l");
+          else if(i>=n_entries_in_leg && i < 2*n_entries_in_leg-1) entry = leg2->AddEntry(legname, legtitle, "l");
+          else entry = leg3->AddEntry(legname, legtitle, "l");
+        }
+        entry->SetLineColor(sh->GetHist()->GetLineColor());
+        entry->SetMarkerStyle(0);
+        entry->SetMarkerSize(0);
+        entry->SetMarkerColor(sh->GetHist()->GetLineColor());
+        entry->SetLineWidth(2);
+        entry->SetLineStyle(lstyle);
+
       }
       entry->SetTextAlign(12);
       //entry->SetTextColor(fSampleColors.At(i));
     }
+    i_max++;
   }
   leg->Draw();
-  
+  if(i_max > n_entries_in_leg) leg2->Draw();
+  if(i_max > 2*n_entries_in_leg) leg3->Draw();
+
 }
+
+
+// void SPlotter::DrawLegend(vector<SHist*> hists)
+// {
+//   // draw a legend
+//
+//   int narr = hists.size();
+//   float yfrac = 0.06;
+//   if (!bPlotRatio) yfrac = 0.05;
+//
+//   float top = 0.89;
+//   if (!bPlotRatio && bDrawLumi) top = 0.86;
+//   if (bSingleEPS){
+//     top = 0.92;
+//     if (bPlotRatio) top = 0.88;
+//     if (bDrawLumi) top = 0.84;
+//   }
+//   float ysize = yfrac*narr;
+//   float xleft = 0.7;
+//   if (bSingleEPS) xleft = 0.6;
+//   float xright = 0.92;
+//   if (!bPortrait){
+//     top = 0.99;
+//     ysize = 0.07*narr;
+//     xleft = 0.72;
+//     xright = 0.96;
+//   }
+//
+//   TLegend *leg = new TLegend(xleft,top-ysize,xright,top, NULL,"brNDC");
+//   leg->SetFillColor(0);
+//   leg->SetLineColor(1);
+//   leg->SetBorderSize(0);
+//   leg->SetTextFont(42);
+//   leg->SetFillStyle(0);
+//   if (bSingleEPS) leg->SetTextSize(0.025);
+//
+//   for (Int_t i=0; i<narr; ++i){
+//     SHist* sh = hists[i];
+//     if (sh->IsStack()) continue;
+//
+//     TString legname = TString::Format("leg_entry_%i",i);
+//     TString legtitle = sh->GetLegName();
+//     TLegendEntry* entry = NULL;
+//     int marker = sh->GetHist()->GetMarkerStyle();
+//     int lstyle = sh->GetHist()->GetLineStyle();
+//
+//     if (marker>0){
+//       entry = leg->AddEntry(legname, legtitle, "lpe");
+//       entry->SetLineWidth(1);
+//       entry->SetLineColor(sh->GetHist()->GetLineColor());
+//       entry->SetMarkerColor(sh->GetHist()->GetLineColor());
+//       entry->SetMarkerStyle(marker);
+//       entry->SetMarkerSize(1.0);
+//       if (bSingleEPS) entry->SetMarkerSize(0.8);
+//     } else {
+//
+//       if (sh->IsUsedInStack()){
+//         entry = leg->AddEntry(legname, legtitle, "f");
+//         entry->SetLineWidth(1);
+//         entry->SetLineColor(sh->GetHist()->GetLineColor());
+//         entry->SetFillColor(sh->GetHist()->GetLineColor());
+//         entry->SetFillStyle(1001);
+//
+//       } else {
+//         entry = leg->AddEntry(legname, legtitle, "l");
+//         entry->SetLineColor(sh->GetHist()->GetLineColor());
+//         entry->SetMarkerStyle(0);
+//         entry->SetMarkerSize(0);
+//         entry->SetMarkerColor(sh->GetHist()->GetLineColor());
+//         entry->SetLineWidth(2);
+//         entry->SetLineStyle(lstyle);
+//
+//       }
+//       entry->SetTextAlign(12);
+//       //entry->SetTextColor(fSampleColors.At(i));
+//     }
+//   }
+//   leg->Draw();
+//
+// }
 
 
 void SPlotter::DrawLumi()
@@ -1400,7 +1769,7 @@ void SPlotter::DrawLumi()
   text1->SetTextAlign(33);
   text1->SetX(0.95);
   text1->SetTextFont(42);
-  if (bPlotRatio){ 
+  if (bPlotRatio){
     text1->SetTextSize(0.06);
     text1->SetY(1.);
   } else {
@@ -1416,7 +1785,7 @@ void SPlotter::DrawLumi()
     text2->SetTextAlign(13);
     text2->SetX(0.24);
     text2->SetTextFont(62);
-    if (bPlotRatio){ 
+    if (bPlotRatio){
       text2->SetTextSize(0.08);
       text2->SetY(0.87);
     } else {
@@ -1433,7 +1802,7 @@ void SPlotter::DrawLumi()
     text3->SetTextAlign(13);
     text3->SetX(0.24);
     text3->SetTextFont(52);
-    if (bPlotRatio){ 
+    if (bPlotRatio){
       text3->SetTextSize(0.06);
       text3->SetY(0.78);
     } else {
@@ -1442,7 +1811,7 @@ void SPlotter::DrawLumi()
     }
     text3->Draw();
   }
-  
+
 }
 
 void SPlotter::DoCosmetics(vector<SHist*> hists)
@@ -1505,7 +1874,7 @@ bool SPlotter::SetMinMax(vector<SHist*> hists)
     double imin = hists[i]->GetMinimum(1e-10);
     if (min>imin){
       if (imin>1e-10){
-	min = imin;
+        min = imin;
       }
     }
   }
@@ -1520,39 +1889,45 @@ bool SPlotter::SetMinMax(vector<SHist*> hists)
   double uscale = 1.2;
   if (name.Contains("_lxy") || name.Contains("_ly") || bPlotLogy ){
     islog = true;
-    uscale = 12.;
+    uscale =1000.;
   }
 
   for (int i=0; i<narr; ++i){
     SHist* h = hists[i];
-    if (h->IsStack()){ 
+    if (h->IsStack()){
       if (!islog){
-	h->GetStack()->SetMinimum(0.0011);
-      } else { 
-	if (min>1e-10){
-	  if (min<0.1){
-	    h->GetStack()->SetMinimum(0.04);
-	  } else {
-	    h->GetStack()->SetMinimum(min);
-	  }
-	}
+        h->GetStack()->SetMinimum(0.0011);
+      } else {
+        if (min>1e-10){
+          if (min<0.1){
+            h->GetStack()->SetMinimum(0.04);
+          } else {
+            h->GetStack()->SetMinimum(min);
+          }
+        }
       }
       h->GetStack()->SetMaximum(uscale*max);
     } else {
-      if (!islog){ 
-	h->GetHist()->SetMinimum(0.0011);
-      } else { 
-	if (min>1e-10){
-	  if (min<0.1){
-	    h->GetHist()->SetMinimum(0.04);
-	  } else {
-	    h->GetHist()->SetMinimum(min);
-	  }
-	}
+      if (!islog){
+        h->GetHist()->SetMinimum(0.0011);
+      } else {
+        if (min>1e-10){
+          if (min<0.1){
+            h->GetHist()->SetMinimum(0.04);
+          } else {
+            h->GetHist()->SetMinimum(min);
+          }
+        }
       }
       h->GetHist()->SetMaximum(uscale*max);
+      h->GetHist()->SetMinimum(0.05);
+      if(bShapeNorm){
+        h->GetHist()->SetMaximum(1.1);
+        h->GetHist()->SetMinimum(0.00004);
+        if(!bPlotLogy) h->GetHist()->SetMinimum(0.01);
+      }
     }
-  }  
+  }
 
   return isok;
 }
@@ -1560,8 +1935,8 @@ bool SPlotter::SetMinMax(vector<SHist*> hists)
 void SPlotter::SetLogAxes(vector<SHist*> hists)
 {
 
- 
-  // set log axes 
+
+  // set log axes
   TString name = hists[0]->GetName();
   gPad->SetLogx(0);
   gPad->SetLogy(0);
@@ -1587,17 +1962,17 @@ void SPlotter::SetLogAxes(vector<SHist*> hists)
 
 int SPlotter::GetCurrentPad(int np)
 {
-  // get the current pad, depending on the number of 
+  // get the current pad, depending on the number of
   // already processed plots
   int ipad = 1;
   int rest = np%2;
-  if (rest==0) ipad=2;      
+  if (rest==0) ipad=2;
   return ipad;
 }
 
 vector<SHist*> SPlotter::GetHistsAtIndex(std::vector<TObjArray*> histarr, int index)
 {
-  // fill an array with histograms at position index. 
+  // fill an array with histograms at position index.
 
   vector<SHist*> hists;
   int narr = histarr.size();
@@ -1605,15 +1980,15 @@ vector<SHist*> SPlotter::GetHistsAtIndex(std::vector<TObjArray*> histarr, int in
     SHist* hist = (SHist*)histarr[i]->At(index);
     hists.push_back(hist);
   }
-  
+
   return hists;
 
 }
 
 vector<SHist*> SPlotter::GetPlottableHists(std::vector<TObjArray*> histarr, int index)
 {
-  // fill an array with plottable histograms at position index. 
-  // if the first histogram in the array should be plotted (DoPlot flag), 
+  // fill an array with plottable histograms at position index.
+  // if the first histogram in the array should be plotted (DoPlot flag),
   // then take at first position in the array
   // otherwise look for the stack and plot it first
   // only then all other histograms are added
@@ -1623,7 +1998,7 @@ vector<SHist*> SPlotter::GetPlottableHists(std::vector<TObjArray*> histarr, int 
   bool gotstack = false;
   SHist* hist = (SHist*)histarr[0]->At(index);
 
-  // check if the histogram is a 2D or 3D histogram, 
+  // check if the histogram is a 2D or 3D histogram,
   // plotting not supported yet, to come
   if (hist->GetHist()->InheritsFrom(TH2::Class())){
     if (debug) cout << "Hist inherits from TH2, return without adding any to the array " << endl;
@@ -1632,8 +2007,8 @@ vector<SHist*> SPlotter::GetPlottableHists(std::vector<TObjArray*> histarr, int 
 
   TString name = hist->GetName();
   TString process = hist->GetProcessName();
-  if (process.Contains("data",TString::kIgnoreCase) 
-      && name.Contains("_perlumibin", TString::kIgnoreCase)){
+  if (process.Contains("data",TString::kIgnoreCase)
+  && name.Contains("_perlumibin", TString::kIgnoreCase)){
     hist->SetIsYieldPlot(true);
     hists.push_back(hist);
     return hists;
@@ -1643,8 +2018,8 @@ vector<SHist*> SPlotter::GetPlottableHists(std::vector<TObjArray*> histarr, int 
     hists.push_back(hist);
     gotstack = false;
     if (debug) cout << "Adding hist " << hist->GetHist()->GetName()
-		    << " from process " << hist->GetProcessName() 
-		    << " and directory " << hist->GetDir() << " to array." << endl;
+    << " from process " << hist->GetProcessName()
+    << " and directory " << hist->GetDir() << " to array." << endl;
   } else { // try if stack exists
     TObjArray* stacks = GetStacks(histarr);
     if (stacks){
@@ -1652,11 +2027,11 @@ vector<SHist*> SPlotter::GetPlottableHists(std::vector<TObjArray*> histarr, int 
       hists.push_back(hist);
       gotstack = true;
       if (debug) cout << "Adding stack " << hist->GetStack()->GetName()
-		      << " from process " << hist->GetProcessName() 
-		      << " and directory " << hist->GetDir() << " to array." << endl;
+      << " from process " << hist->GetProcessName()
+      << " and directory " << hist->GetDir() << " to array." << endl;
     }
   }
-  
+
   // loop over the rest and add them to the array
   int narr = histarr.size();
   for (int i=1; i<narr; ++i){
@@ -1666,33 +2041,33 @@ vector<SHist*> SPlotter::GetPlottableHists(std::vector<TObjArray*> histarr, int 
     if (hist->DoDraw()){ // take it if it should be drawn
 
       if (hist->IsStack()){
-	if (!gotstack){ // take the stack only if not already added
-	  hists.push_back(hist);
-	  if (debug) cout << "Adding stack " << hist->GetStack()->GetName()
-			  << " from process " << hist->GetProcessName() 
-			  << " and directory " << hist->GetDir() << " to array." << endl;
-	}
+        if (!gotstack){ // take the stack only if not already added
+          hists.push_back(hist);
+          if (debug) cout << "Adding stack " << hist->GetStack()->GetName()
+          << " from process " << hist->GetProcessName()
+          << " and directory " << hist->GetDir() << " to array." << endl;
+        }
       } else { // take the histogram if it's not the stack hist
-	hists.push_back(hist);
-	if (debug) cout << "Adding hist " << hist->GetHist()->GetName()
-			<< " from process " << hist->GetProcessName() 
-			<< " and directory " << hist->GetDir() << " to array." << endl;
-      }
+      hists.push_back(hist);
+      if (debug) cout << "Adding hist " << hist->GetHist()->GetName()
+      << " from process " << hist->GetProcessName()
+      << " and directory " << hist->GetDir() << " to array." << endl;
     }
   }
+}
 
-  if (debug) cout << "SPlotter: Done with collecting plottable hists for index " 
-		  << index << ", got " << hists.size() << " histograms" << endl;
-  
-  return hists;
+if (debug) cout << "SPlotter: Done with collecting plottable hists for index "
+<< index << ", got " << hists.size() << " histograms" << endl;
+
+return hists;
 
 }
 
 void SPlotter::DrawPageNum()
 {
-  
+
   m_can->cd();
-  TPaveText* text; 
+  TPaveText* text;
   TString s;
   s.Form("%i",m_page);
   if (bPortrait){
@@ -1704,16 +2079,16 @@ void SPlotter::DrawPageNum()
   text->SetFillColor(0);
   text->AddText(s.Data());
   text->Draw("same");
-  
+
 }
 
 void SPlotter::GeneralCosmetics(TH1* hist)
 {
   // set Y-axis title
-  hist->GetYaxis()->SetTitle("Events");  
-  
+  hist->GetYaxis()->SetTitle("Events");
+
   // set X-axis title
-  hist->GetXaxis()->SetTitle(hist->GetTitle()); 
+  hist->GetXaxis()->SetTitle(hist->GetTitle());
 
   hist->SetTitle("");
 
@@ -1721,7 +2096,7 @@ void SPlotter::GeneralCosmetics(TH1* hist)
     hist->GetYaxis()->SetTitle("#DeltaN/N");
   }
 
-  if (bScaleToWidth) hist->GetYaxis()->SetTitle("Events/GeV");
+  if (bScaleToWidth) hist->GetYaxis()->SetTitle("Events / bin");
 
   hist->GetXaxis()->SetTitleFont(42);
   hist->GetXaxis()->SetLabelFont(42);
@@ -1732,16 +2107,16 @@ void SPlotter::GeneralCosmetics(TH1* hist)
 
 void SPlotter::StackCosmetics(THStack* hist)
 {
-  
+
   // set Y-axis title
-  hist->GetYaxis()->SetTitle("Events"); 
-  hist->GetYaxis()->SetTitleOffset(1.0);  
-  hist->GetYaxis()->SetTitleSize(0.06);  
-  
+  hist->GetYaxis()->SetTitle("Events");
+  hist->GetYaxis()->SetTitleOffset(1.0);
+  hist->GetYaxis()->SetTitleSize(0.06);
+
   // set X-axis title
-  hist->GetXaxis()->SetTitle(hist->GetTitle()); 
-  hist->GetXaxis()->SetTitleOffset(1.0);  
-  hist->GetXaxis()->SetTitleSize(0.06);  
+  hist->GetXaxis()->SetTitle(hist->GetTitle());
+  hist->GetXaxis()->SetTitleOffset(1.0);
+  hist->GetXaxis()->SetTitleSize(0.06);
 
   hist->SetTitle("");
 
@@ -1749,7 +2124,7 @@ void SPlotter::StackCosmetics(THStack* hist)
     hist->GetYaxis()->SetTitle("#DeltaN/N");
   }
 
-  if (bScaleToWidth) hist->GetYaxis()->SetTitle("Events/GeV");
+  if (bScaleToWidth) hist->GetYaxis()->SetTitle("Events / bin");
 
   hist->GetXaxis()->SetTitleFont(42);
   hist->GetXaxis()->SetLabelFont(42);
@@ -1763,18 +2138,18 @@ void SPlotter::PortraitCosmetics(TH1* hist)
 
   // top histogram of the ratio plot
   if (bPlotRatio){
-    
+
     // x-axis
     hist->GetXaxis()->SetTickLength(0.05);
 
     // y-axis
     hist->GetYaxis()->SetTitleSize(0.07);
     hist->GetYaxis()->SetLabelSize(0.062);
-    hist->GetYaxis()->SetLabelOffset(0.01);   
+    hist->GetYaxis()->SetLabelOffset(0.01);
     hist->GetYaxis()->SetTitleOffset(0.8);
     hist->GetYaxis()->SetTickLength(0.02);
-  
-  // only this histogram
+
+    // only this histogram
   } else {
 
     hist->GetXaxis()->SetLabelSize(0.05);
@@ -1782,7 +2157,7 @@ void SPlotter::PortraitCosmetics(TH1* hist)
     hist->GetXaxis()->SetTickLength(0.03);
     hist->GetXaxis()->SetTitleSize(0.05);
     hist->GetXaxis()->SetTitleOffset(1.2);
-    
+
     hist->GetYaxis()->SetTitleOffset(1.2);
     hist->GetYaxis()->SetTitleSize(0.06);
     hist->GetYaxis()->SetLabelSize(0.045);
@@ -1790,7 +2165,7 @@ void SPlotter::PortraitCosmetics(TH1* hist)
     hist->GetYaxis()->SetLabelOffset(0.011);
 
   }
-  
+
 }
 
 void SPlotter::SingleEPSCosmetics(TH1* hist)
@@ -1798,18 +2173,18 @@ void SPlotter::SingleEPSCosmetics(TH1* hist)
 
   // top histogram of the ratio plot
   if (bPlotRatio){
-    
+
     // x-axis
     hist->GetXaxis()->SetTickLength(0.05);
 
     // y-axis
     hist->GetYaxis()->SetTitleSize(0.07);
     hist->GetYaxis()->SetLabelSize(0.062);
-    hist->GetYaxis()->SetLabelOffset(0.01);   
+    hist->GetYaxis()->SetLabelOffset(0.01);
     hist->GetYaxis()->SetTitleOffset(1.15);
     hist->GetYaxis()->SetTickLength(0.02);
-  
-  // only this histogram
+
+    // only this histogram
   } else {
 
     hist->GetXaxis()->SetLabelSize(0.03);
@@ -1817,7 +2192,7 @@ void SPlotter::SingleEPSCosmetics(TH1* hist)
     hist->GetXaxis()->SetTickLength(0.03);
     hist->GetXaxis()->SetTitleSize(0.05);
     hist->GetXaxis()->SetTitleOffset(1.2);
-    
+
     hist->GetYaxis()->SetTitleOffset(1.8);
     hist->GetYaxis()->SetTitleSize(0.05);
     hist->GetYaxis()->SetLabelSize(0.045);
@@ -1825,7 +2200,7 @@ void SPlotter::SingleEPSCosmetics(TH1* hist)
     hist->GetYaxis()->SetLabelOffset(0.011);
 
   }
-  
+
 }
 
 void SPlotter::SingleEPSRatioCosmetics(TH1* hist)
@@ -1835,16 +2210,16 @@ void SPlotter::SingleEPSRatioCosmetics(TH1* hist)
   //hist->GetYaxis()->SetRangeUser(0.05, 1.95);
   hist->SetMarkerSize(0.7);
 
-  // cosmetics for portrait mode 
+  // cosmetics for portrait mode
   if (bPortrait){
     hist->SetTitle("");
-    
+
     // x-axis
     hist->GetXaxis()->SetLabelSize(0.12);
     hist->GetXaxis()->SetTickLength(0.08);
     hist->GetXaxis()->SetTitleSize(0.12);
     hist->GetXaxis()->SetTitleOffset(1.25);
-	  
+
     // y-axis
     hist->GetYaxis()->CenterTitle();
     hist->GetYaxis()->SetTitleSize(0.12);
@@ -1855,25 +2230,25 @@ void SPlotter::SingleEPSRatioCosmetics(TH1* hist)
     hist->GetYaxis()->SetTickLength(0.02);
     hist->GetYaxis()->SetLabelOffset(0.011);
 
-    // cosmetics for landscape mode 
+    // cosmetics for landscape mode
   } else {
-    
+
     hist->SetTitle("");
     hist->SetTitleOffset(1.1, "X");
     hist->SetTitleOffset(0.5, "Y");
     hist->SetLabelOffset(0.02, "X");
     hist->SetLabelOffset(0.01, "Y");
-	  
+
     hist->GetXaxis()->SetLabelSize(0.14);
     hist->GetXaxis()->SetTickLength(0.07);
     hist->GetXaxis()->SetTitleSize(0.15);
-	  
+
     hist->GetYaxis()->CenterTitle();
     hist->GetYaxis()->SetTitleSize(0.11);
     hist->GetYaxis()->SetLabelSize(0.12);
     hist->GetYaxis()->SetNdivisions(505);
     hist->GetYaxis()->SetTickLength(0.03);
-    
+
   }
 
 }
@@ -1882,30 +2257,30 @@ void SPlotter::SingleEPSRatioCosmetics(TH1* hist)
 void SPlotter::YieldCosmetics(TH1* hist)
 {
   // cosmetics for the lumi yield histogram
-    hist->GetXaxis()->SetLabelSize(0.05);
-    hist->GetXaxis()->SetLabelOffset(0.008);
-    hist->GetXaxis()->SetTickLength(0.03);
-    hist->GetXaxis()->SetTitleSize(0.05);
-    hist->GetXaxis()->SetTitleOffset(1.2);
-    
-    hist->GetYaxis()->SetTitleOffset(1.2);
-    hist->GetYaxis()->SetTitleSize(0.06);
-    hist->GetYaxis()->SetLabelSize(0.045);
+  hist->GetXaxis()->SetLabelSize(0.05);
+  hist->GetXaxis()->SetLabelOffset(0.008);
+  hist->GetXaxis()->SetTickLength(0.03);
+  hist->GetXaxis()->SetTitleSize(0.05);
+  hist->GetXaxis()->SetTitleOffset(1.2);
+
+  hist->GetYaxis()->SetTitleOffset(1.2);
+  hist->GetYaxis()->SetTitleSize(0.06);
+  hist->GetYaxis()->SetLabelSize(0.045);
+  hist->GetYaxis()->SetTickLength(0.02);
+  hist->GetYaxis()->SetLabelOffset(0.011);
+
+  if (bSingleEPS){
+    hist->GetYaxis()->SetTitleOffset(1.8);
+    hist->GetYaxis()->SetTitleSize(0.055);
+    hist->GetYaxis()->SetLabelSize(0.05);
     hist->GetYaxis()->SetTickLength(0.02);
     hist->GetYaxis()->SetLabelOffset(0.011);
+  }
 
-    if (bSingleEPS){
-      hist->GetYaxis()->SetTitleOffset(1.8);
-      hist->GetYaxis()->SetTitleSize(0.055);
-      hist->GetYaxis()->SetLabelSize(0.05);
-      hist->GetYaxis()->SetTickLength(0.02);
-      hist->GetYaxis()->SetLabelOffset(0.011);
-    }
-
-    hist->GetXaxis()->SetTitle("integrated luminosity [fb^{-1}]");
-    double dlum = hist->GetXaxis()->GetBinWidth(1);
-    TString xtit = TString::Format("events per %3.1f fb^{-1}", dlum);
-    hist->GetYaxis()->SetTitle(xtit);
+  hist->GetXaxis()->SetTitle("integrated luminosity [fb^{-1}]");
+  double dlum = hist->GetXaxis()->GetBinWidth(1);
+  TString xtit = TString::Format("events per %3.1f fb^{-1}", dlum);
+  hist->GetYaxis()->SetTitle(xtit);
 }
 
 
@@ -1924,16 +2299,16 @@ void SPlotter::RatioCosmetics(TH1* hist)
   //hist->GetYaxis()->SetRangeUser(0.05, 1.95);
   hist->SetMarkerSize(0.7);
 
-  // cosmetics for portrait mode 
+  // cosmetics for portrait mode
   if (bPortrait){
     hist->SetTitle("");
-    
+
     // x-axis
     hist->GetXaxis()->SetLabelSize(0.12);
     hist->GetXaxis()->SetTickLength(0.08);
     hist->GetXaxis()->SetTitleSize(0.12);
     hist->GetXaxis()->SetTitleOffset(1.25);
-	  
+
     // y-axis
     hist->GetYaxis()->CenterTitle();
     hist->GetYaxis()->SetTitleSize(0.12);
@@ -1944,25 +2319,25 @@ void SPlotter::RatioCosmetics(TH1* hist)
     hist->GetYaxis()->SetTickLength(0.02);
     hist->GetYaxis()->SetLabelOffset(0.011);
 
-    // cosmetics for landscape mode 
+    // cosmetics for landscape mode
   } else {
-    
+
     hist->SetTitle("");
     hist->SetTitleOffset(1.1, "X");
     hist->SetTitleOffset(0.5, "Y");
     hist->SetLabelOffset(0.02, "X");
     hist->SetLabelOffset(0.01, "Y");
-	  
+
     hist->GetXaxis()->SetLabelSize(0.14);
     hist->GetXaxis()->SetTickLength(0.07);
     hist->GetXaxis()->SetTitleSize(0.15);
-	  
+
     hist->GetYaxis()->CenterTitle();
     hist->GetYaxis()->SetTitleSize(0.11);
     hist->GetYaxis()->SetLabelSize(0.12);
     hist->GetYaxis()->SetNdivisions(505);
     hist->GetYaxis()->SetTickLength(0.03);
-    
+
   }
 
 }
@@ -1996,4 +2371,3 @@ void SPlotter::ScaleToWidth(std::vector<SHist*> hists)
     hists[i]->ScaleToBinWidth();
   }
 }
-
