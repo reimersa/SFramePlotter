@@ -1,0 +1,7 @@
+*.pcm
+tmp/*
+bin/*
+SteerPlotter_Dict.cxx
+SHist_Dict.cxx
+BaseSteer_Dict.cxx
+*~
