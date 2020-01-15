@@ -1331,59 +1331,24 @@ void SPlotter::DrawLegend(vector<SHist*> hists)
   double xleft = 0.5;
   double xright = 0.92;
 
-  // // ?????
-  // bool isMLQ = false;
-  // xleft = 0.37;
-  // xright = 0.85;
-  // double xwidth1 = 0.15;
-  // if(!isMLQ) xwidth1 = 0.15;
-  // double xwidth2 = 0.15;
-  // double shift2 = 0.04;
-  // if(!isMLQ) shift2 = 0.01;
-  // double yheight1 = 0.21;
-  // double yheight2 = 0.21;
-  // if(!isMLQ) yheight2 = 0.14;
-  // double yheight3 = 0.21;
-  // double ytop1 = 0.89;
-  // double ytop2 = 0.89;
-  // if(!isMLQ) ytop2 = 0.82;
-  // double ytop3 = 0.89;
-
-  // // Paper plots without CMS tag, MLQ = true/false
-  // bool isMLQ = false;
-  // xleft = 0.27;
-  // xright = 0.92;
-  // double xwidth1 = 0.18;
-  // double xwidth2 = 0.18;
-  // double shift2 = 0.00;
-  // double shift3 = 0.02;
-  // if(!isMLQ) shift2 = 0.02;
-  // double yheight1 = 0.18;
-  // double yheight2 = 0.18;
-  // if(!isMLQ) yheight2 = 0.12;
-  // double yheight3 = 0.18;
-  // double ytop1 = 0.87;
-  // double ytop2 = 0.87;
-  // if(!isMLQ) ytop2 = 0.81;
-  // double ytop3 = 0.87;
-
-  //TagProbe Plots
+  // Fullselection Plots
   n_entries_in_leg = 4;
   bool isMLQ = true;
-  xleft = 0.5;
+  xleft = 0.27;
   xright = 0.92;
-  double xwidth1 = (xright-xleft)/2.;
-  double xwidth2 = (xright-xleft)/2.;
+  double xwidth1 = 0.18;
+  double xwidth2 = 0.18;
   double shift2 = 0.00;
-  double shift3 = 0.05;
+  double shift3 = 0.02;
   double yheight1 = 0.24;
   double yheight2 = 0.24;
-  double yheight3 = 0.24;
+  double yheight3 = 0.18;
   double ytop1 = 0.87;
   double ytop2 = 0.87;
   double ytop3 = 0.87;
 
-  // //HFLepton Plots
+  // // TagProbe Plots
+  // n_entries_in_leg = 4;
   // bool isMLQ = true;
   // xleft = 0.5;
   // xright = 0.92;
@@ -1392,164 +1357,11 @@ void SPlotter::DrawLegend(vector<SHist*> hists)
   // double shift2 = 0.00;
   // double shift3 = 0.05;
   // double yheight1 = 0.24;
-  // double yheight2 = 0.12;
-  // double yheight3 = 0.18;
+  // double yheight2 = 0.24;
+  // double yheight3 = 0.24;
   // double ytop1 = 0.87;
   // double ytop2 = 0.87;
   // double ytop3 = 0.87;
-
-  // //FakeRateDiboson Plots
-  // bool isMLQ = true;
-  // n_entries_in_leg = 3;
-  // xleft = 0.5;
-  // xright = 0.92;
-  // double xwidth1 = (xright-xleft)/2.;
-  // double xwidth2 = (xright-xleft)/2.;
-  // double shift2 = 0.00;
-  // double shift3 = 0.05;
-  // double yheight1 = 0.18;
-  // double yheight2 = 0.18;
-  // double yheight3 = 0.18;
-  // double ytop1 = 0.87;
-  // double ytop2 = 0.87;
-  // double ytop3 = 0.87;
-
-  // //FakeRateElectron Plots
-  // bool isMLQ = true;
-  // n_entries_in_leg = 2;
-  // //without data, for ele/muon types plot
-  // // n_entries_in_leg = 3;
-  // xleft = 0.5;
-  // //without data, for ele/muon types plot
-  // // xleft = 0.5 + (0.92-0.5)/2;
-  // xright = 0.92;
-  // double xwidth1 = (xright-xleft)/2.;
-  // double xwidth2 = (xright-xleft)/2.;
-  // //without data, for ele/muon types plot
-  // // xwidth1 = (xright-xleft);
-  // // xwidth2 = 0.001;
-  // double shift2 = 0.00;
-  // double shift3 = 0.05;
-  // double yheight1 = 0.12;
-  // //without data, for ele/muon types plot
-  // // yheight1 = 0.18;
-  // double yheight2 = 0.12;
-  // double yheight3 = 0.18;
-  // double ytop1 = 0.87;
-  // double ytop2 = 0.87;
-  // double ytop3 = 0.87;
-
-  // //Alpha VR data-driven Plots
-  // n_entries_in_leg = 3;
-  // bool isMLQ = true;
-  // xleft = 0.5;
-  // xright = 0.92;
-  // double xwidth1 = (xright-xleft)/2.;
-  // double xwidth2 = (xright-xleft)/2.;
-  // double shift2 = 0.00;
-  // double shift3 = 0.05;
-  // double yheight1 = 0.18;
-  // double yheight2 = 0.12;
-  // double yheight3 = 0.18;
-  // double ytop1 = 0.87;
-  // double ytop2 = 0.87;
-  // double ytop3 = 0.87;
-
-  // //Alpha VR MC Plots
-  // n_entries_in_leg = 3;
-  // bool isMLQ = true;
-  // xleft = 0.5;
-  // xright = 0.92;
-  // double xwidth1 = (xright-xleft)/2.;
-  // double xwidth2 = (xright-xleft)/2.;
-  // double shift2 = 0.00;
-  // double shift3 = 0.05;
-  // double yheight1 = 0.18;
-  // double yheight2 = 0.18;
-  // double yheight3 = 0.18;
-  // double ytop1 = 0.87;
-  // double ytop2 = 0.87;
-  // double ytop3 = 0.87;
-
-  // //Preselection Plots without data
-  // n_entries_in_leg = 4;
-  // bool isMLQ = false;
-  // xleft = 0.22;
-  // xright = 0.92;
-  // double xwidth1 = 0.18;
-  // double xwidth2 = 0.18;
-  // double shift2 = 0.00;
-  // double shift3 = 0.02;
-  // double yheight1 = 0.20;
-  // double yheight2 = 0.15;
-  // double yheight3 = 0.15;
-  // double ytop1 = 0.92;
-  // double ytop2 = 0.87;
-  // double ytop3 = 0.87;
-
-  // // Fullselection Plots without data, without minor
-  // bool isMLQ = false;
-  // xleft = 0.22;
-  // xright = 0.92;
-  // double xwidth1 = 0.18;
-  // double xwidth2 = 0.18;
-  // double shift2 = 0.00;
-  // double shift3 = 0.02;
-  // double yheight1 = 0.20;
-  // double yheight2 = 0.15;
-  // double yheight3 = 0.15;
-  // double ytop1 = 0.92;
-  // double ytop2 = 0.87;
-  // double ytop3 = 0.87;
-
-  // //Sideband Control Plots Fullsel
-  // n_entries_in_leg = 3;
-  // bool isMLQ = true;
-  // xleft = 0.5;
-  // xright = 0.92;
-  // double xwidth1 = (xright-xleft)/2.;
-  // double xwidth2 = (xright-xleft)/2.;
-  // double shift2 = 0.00;
-  // double shift3 = 0.05;
-  // double yheight1 = 0.18;
-  // double yheight2 = 0.18;
-  // double yheight3 = 0.18;
-  // double ytop1 = 0.87;
-  // double ytop2 = 0.87;
-  // double ytop3 = 0.87;
-
-  // //Sideband Shape comparisons
-  // n_entries_in_leg = 2;
-  // bool isMLQ = true;
-  // xleft = 0.71;
-  // xright = 0.92;
-  // double xwidth1 = (xright-xleft);
-  // double xwidth2 = 0.01;
-  // double shift2 = 0.00;
-  // double shift3 = 0.05;
-  // double yheight1 = 0.12;
-  // double yheight2 = 0.12;
-  // double yheight3 = 0.12;
-  // double ytop1 = 0.87;
-  // double ytop2 = 0.87;
-  // double ytop3 = 0.87;
-
-  // //SingleTth
-  // n_entries_in_leg = 3;
-  // bool isMLQ = true;
-  // xleft = 0.22;
-  // xright = 0.92;
-  // double xwidth1 = 0.18;
-  // double xwidth2 = 0.18;
-  // double shift2 = 0.00;
-  // double shift3 = 0.05;
-  // double yheight1 = 0.18;
-  // double yheight2 = 0.18;
-  // double yheight3 = 0.18;
-  // double ytop1 = 0.87;
-  // double ytop2 = 0.87;
-  // double ytop3 = 0.87;
-
 
 
 
@@ -1920,7 +1732,7 @@ bool SPlotter::SetMinMax(vector<SHist*> hists)
         }
       }
       h->GetHist()->SetMaximum(uscale*max);
-      h->GetHist()->SetMinimum(0.05);
+      h->GetHist()->SetMinimum(0.0005);
       if(bShapeNorm){
         h->GetHist()->SetMaximum(1.1);
         h->GetHist()->SetMinimum(0.00004);
