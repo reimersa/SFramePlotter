@@ -12,8 +12,8 @@ SteerPlotter::SteerPlotter()
 {
   // Here you have to set the default values which will be used,
   // if this steering class is required but not given in the steering file
-   
-   fNumOfSamples = 0;  
+
+   fNumOfSamples = 0;
    fOutputPsFile = "Plots/test.ps";
    bSubstractBkgd = false;
    bDrawEntries = false;
@@ -39,7 +39,7 @@ SteerPlotter::~SteerPlotter()
 
 void SteerPlotter::Print(Option_t* opt) const
 {
-  // Prints all settings of the steering  
+  // Prints all settings of the steering
 
   // First: perform some sanity checks
   if (fNumOfSamples != fInputFiles.GetEntries()){
@@ -81,8 +81,8 @@ void SteerPlotter::Print(Option_t* opt) const
     TString name(((TObjString*) fSampleNames.At(i))->GetName() );
     cout << "File of sample " << i << ":  " << setw(25) << ((TObjString*)fInputFiles.At(i))->GetName()
 	 << "   name =  " << setw(15) << name
-    	 << "   color = " << setw(4) << fHistColors.At(i) 
-	 << "   marker = " << setw(4) << fHistMarkers.At(i) 
+    	 << "   color = " << setw(4) << fHistColors.At(i)
+	 << "   marker = " << setw(4) << fHistMarkers.At(i)
 	 << "   with weight " << fSamplesWeight.At(i);
     if (fSamplesUnc.GetSize()!=0){
       cout << "  and uncertainty of " << fSamplesUnc.At(i)*100 << "%" << endl;
@@ -98,7 +98,7 @@ void SteerPlotter::Print(Option_t* opt) const
           TString name(((TObjString*) fSamplesToStack.At(i))->GetName() );
           cout << "    Name of sample " << i << " in stack :      " << setw(15) << name << endl;
       }
-      
+
   } else {
       cout << "No stacking will be plotted." << endl;
   }
@@ -114,7 +114,7 @@ void SteerPlotter::Print(Option_t* opt) const
           TString name(((TObjString*) fScaleSysUnc.At(i))->GetName() );
           cout << "    Name of systematic unc " << i << " = " << setw(15) << name << " scale with factor : " << fSysUncWeight.At(i) << endl;
       }
-      
+
     }
   }
 
@@ -137,7 +137,7 @@ void SteerPlotter::Print(Option_t* opt) const
   }
   cout << (bDrawLegend? "Legend will be plotted everywhere." : "Legend will be plotted on first plot only") << endl;
   cout << (bShapeNorm? "Shape normalization" : "No shape normalization") << endl;
-  cout << (bScaleToWidth? "Scaling to bin width." : "Not scaling to bin widht.") << endl;
+  cout << (bScaleToWidth? "Scaling to bin width." : "Not scaling to bin width.") << endl;
   cout << (bDoCumulative? "Cumulative distributions will be plotted." : "Normal distributions will be plotted") << endl;
   cout << (bSingleEPS? "Creating one eps file per histogram." : "Creating one ps file with all histograms for each histogram collection.") << endl;
   cout << (bIgnoreEmptyBins? "Empty bins will not be plotted in the ratio." : "Empty bins will have infinite error in the ratio.") << endl;
@@ -145,7 +145,7 @@ void SteerPlotter::Print(Option_t* opt) const
   cout << (bPortrait?  "Setting the page to portrait mode" : "Setting the page to landscape mode") << endl;
   cout << (bPlotThetaFile? "Creating plots from one input theta file." : "Using standard SFrame output for plots.") << endl;
   cout << "--------------------------------------------------------------------------------------------------------------------" << endl;
-  
+
 }
 
 void SteerPlotter::SetScaleToWidth(Bool_t flag){bScaleToWidth = flag;}

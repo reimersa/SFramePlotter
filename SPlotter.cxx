@@ -1897,7 +1897,7 @@ void SPlotter::DrawPageNum()
 void SPlotter::GeneralCosmetics(TH1* hist)
 {
   // set Y-axis title
-  hist->GetYaxis()->SetTitle("Events");
+  hist->GetYaxis()->SetTitle("Events / bin");
 
   // set X-axis title
   hist->GetXaxis()->SetTitle(hist->GetTitle());
@@ -1921,7 +1921,7 @@ void SPlotter::StackCosmetics(THStack* hist)
 {
 
   // set Y-axis title
-  hist->GetYaxis()->SetTitle("Events");
+  hist->GetYaxis()->SetTitle("Events / bin");
   hist->GetYaxis()->SetTitleOffset(1.0);
   hist->GetYaxis()->SetTitleSize(0.06);
 
