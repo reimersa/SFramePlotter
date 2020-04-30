@@ -1,8 +1,8 @@
 SteerPlotter(){
 
   // steering for the plotter
-  fCycleName     = "/nfs/dust/cms/user/reimersa/LQTopLep/2016/Trigger/Fullselection_2eTrigger/uhh2.AnalysisModuleRunner"; // name of the cycle (first part of the name of the root files)
-  fInputFiles    = "DATA.DATA_Muon_2016v3.root, MC.TTbar_2016v3.root, MC.SingleTop_2016v3.root, MC.DYJets_2016v3.root, MC.TTV_2016v3.root, MC.WJets_2016v3.root, MC.Diboson_2016v3.root"; // name of the input files (second part)
+  fCycleName     = "/nfs/dust/cms/user/reimersa/LQTopLep/2017/Trigger/Fullselection_2eTrigger/uhh2.AnalysisModuleRunner"; // name of the cycle (first part of the name of the root files)
+  fInputFiles    = "DATA.DATA_Muon_2017v2.root, MC.TTbar_2017v2.root, MC.SingleTop_2017v2.root, MC.DYJets_2017v2.root, MC.TTV_2017v2.root, MC.WJets_2017v2.root, MC.Diboson_2017v2.root"; // name of the input files (second part)
 
   fSampleNames   = "     Data,  ttbar,  SingleSPACEt,  DY + jets,  ttbar + V,  W + jets,  Diboson";
   fSamplesWeight = "      1.0,    1.0,           1.0,        1.0,        1.0,       1.0,      1.0";
@@ -10,10 +10,10 @@ SteerPlotter(){
   fHistColors =  "          1,    810,           634,        798,        413,       613,      860";
   fHistMarkers = "         20,      0,             0,          0,          0,         0,        0";
 
-  fSamplesToStack = "Diboson_2016v3, WJets_2016v3, TTV_2016v3, DYJets_2016v3, SingleTop_2016v3, TTbar_2016v3"; // the names of chains which you would like to stack (same as in input filenames)
+  fSamplesToStack = "Diboson_2017v2, WJets_2017v2, TTV_2017v2, DYJets_2017v2, SingleTop_2017v2, TTbar_2017v2"; // the names of chains which you would like to stack (same as in input filenames)
 
-  //fOutputPsFile = "/nfs/dust/cms/user/reimersa/LQTopLep/2016/Trigger/Fullselection_2eTrigger/Plots/Plots_Mu.ps";
-  fOutputPsFile = "/nfs/dust/cms/user/reimersa/LQTopLep/2016/Trigger/Fullselection_2eTrigger/Plots/SingleEPS/Plots_Mu.ps";
+  //fOutputPsFile = "/nfs/dust/cms/user/reimersa/LQTopLep/2017/Trigger/Fullselection_2eTrigger/Plots/Plots_Mu.ps";
+  fOutputPsFile = "/nfs/dust/cms/user/reimersa/LQTopLep/2017/Trigger/Fullselection_2eTrigger/Plots/SingleEPS/Plots_Mu.ps";
 
   bRatioPlot = true;   // plot ratio histograms?
   bZScoreInRatio = false;   // plot z-score instead of usual ratio
@@ -21,7 +21,7 @@ SteerPlotter(){
   bShapeNorm = false;   // shape normalization?
   bPortrait = true;    // portrait or landscape?
   bDrawEntries = false; // draw the histogram entries?
-  fLumi = 35.9; // luminosity of sample
+  fLumi = 41.5; // luminosity of sample
   bLumiNorm = false;
   fSysError = 0.0; // luminosity uncertainty
   bDrawLumi = true;   // plot ratio histograms?

@@ -1698,7 +1698,7 @@ bool SPlotter::SetMinMax(vector<SHist*> hists)
   }
 
   bool islog = false;
-  double uscale = 1.2;
+  double uscale = 1.6;
   if (name.Contains("_lxy") || name.Contains("_ly") || bPlotLogy ){
     islog = true;
     uscale =1000.;
